@@ -1,0 +1,155 @@
+/*
+ * MixingSound design tokens — "Warm Console".
+ * Dark graphite surfaces with warm amber light, track colours from the engine palette.
+ * Dark only, by design: studio sessions run for hours in dim rooms and a light theme would
+ * also fight the waveform/meter colour language. Do not add a light theme in P0/P1.
+ *
+ * Rule: components use these variables; no raw hex/px for colour, font, radius or motion.
+ * Contrast notes (WCAG, measured against --bg-1 unless stated): --text 14.4:1, --text-2 7.8:1,
+ * --text-muted 5.9:1 (4.9:1 on --bg-3). --text-disabled is intentionally below 4.5:1 (disabled controls are exempt).
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Surfaces (darkest -> lightest). Elevation = lighter + top highlight. ---- */
+  --bg-0: #0f0e0c; /* app canvas, behind everything */
+  --bg-1: #171512; /* panels: transport, headers, mixer */
+  --bg-2: #1f1c18; /* raised: track headers, strips, popovers */
+  --bg-3: #2a2621; /* controls at rest */
+  --bg-4: #352f28; /* controls hover */
+  --bg-5: #433b32; /* controls pressed / selected row */
+  --lane-a: #141210; /* timeline lane, even */
+  --lane-b: #181613; /* timeline lane, odd */
+  --well: #0b0a09; /* inset wells: meters, fader slots, LCD */
+  --scrim: rgb(8 7 6 / 0.66);
+
+  --line: #2b2722; /* hairlines between panels */
+  --line-strong: #3b352e; /* control borders */
+  --line-hi: rgb(255 244 224 / 0.045); /* 1px top highlight on raised surfaces */
+
+  /* ---- Text ---- */
+  --text: #ece4d6;
+  --text-2: #b3a995;
+  --text-muted: #9c9281;
+  --text-disabled: #6a6256;
+  --text-on-accent: #1a1208;
+
+  /* ---- Accent & state ---- */
+  --accent: #e8a03c; /* amber: primary action, loop, selected-on */
+  --accent-hi: #f4b95e;
+  --accent-lo: #8a5a17;
+  --accent-wash: rgb(232 160 60 / 0.14); /* loop region, selected-row tint */
+  --play: #8fcf6e; /* playing state */
+  --solo: #f0cf5a;
+  --mute: #e0603f;
+  --danger: #e5483a;
+  --info: #6cc4f0;
+  --focus: #6cc4f0; /* focus ring: cool cyan to stay legible on warm UI and every track colour */
+  --select: #f4ede0; /* selected clip outline, playhead */
+
+  /* ---- Meters: thresholds are dBFS, used by the meter helper AND by CSS legends ---- */
+  --meter-ok: #7bc86c; /* <= -18 dBFS */
+  --meter-warn: #e6b93f; /* -18 .. -6 */
+  --meter-hot: #ee8a2e; /* -6 .. -1 */
+  --meter-clip: #e5483a; /* > -1 and the clip latch */
+  --meter-off: #2a2621; /* unlit segment */
+  --meter-peak: #f4ede0; /* peak-hold tick */
+  --meter-warn-db: -18;
+  --meter-hot-db: -6;
+  --meter-clip-db: -1;
+  --meter-floor-db: -60;
+  --meter-seg-h: 3px;
+  --meter-seg-gap: 1px;
+  --meter-w: 8px; /* one channel */
+
+  /* ---- Track palette: mirrors crates/engine/src/model.rs TRACK_COLORS (index = track no. % 8).
+         Colours come from track.color at runtime; these exist for swatch menus and tests. ---- */
+  --track-1: #d98c3f;
+  --track-2: #c9b458;
+  --track-3: #7fae6a;
+  --track-4: #4fa3a5;
+  --track-5: #5b86c9;
+  --track-6: #8e6fc4;
+  --track-7: #c46f9f;
+  --track-8: #c95f55;
+  --clip-ink: #14110e; /* text on a track-colour clip header; >= 4.5:1 on all 8 colours */
+
+  /* ---- Typography: Windows system fonts only (CSP forbids network fonts). ---- */
+  --font-ui: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-label: 'Bahnschrift', 'Segoe UI Semibold', 'Segoe UI', sans-serif; /* DIN-like: caps labels, numerals */
+  --font-mono: 'Cascadia Mono', 'Consolas', 'Lucida Console', monospace; /* time display, dB readouts */
+
+  --fs-2xs: 10px; /* fader/meter scale ticks only */
+  --fs-xs: 11px; /* caps labels */
+  --fs-sm: 12px; /* secondary text, readouts */
+  --fs-md: 13px; /* default UI text */
+  --fs-lg: 15px; /* dialog titles */
+  --fs-xl: 20px;
+  --fs-time: 24px; /* transport time display */
+  --lh-tight: 1.15;
+  --lh-base: 1.4;
+  --ls-caps: 0.07em;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* ---- Spacing (4px base; intentionally uneven rhythm: tight inside groups, loose between) ---- */
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+  --sp-7: 24px;
+  --sp-8: 32px;
+
+  /* ---- Radii: small on working surfaces, larger only on floating things ---- */
+  --r-xs: 2px; /* meters, ticks */
+  --r-sm: 3px; /* buttons, clips, inputs */
+  --r-md: 6px; /* dialogs, popovers, toasts */
+  --r-pill: 999px;
+
+  /* ---- Elevation ---- */
+  --shadow-1: inset 0 1px 0 var(--line-hi), 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-inset: inset 0 1px 3px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 8px 24px rgb(0 0 0 / 0.55), inset 0 1px 0 var(--line-hi);
+  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.65), inset 0 1px 0 var(--line-hi);
+  --glow-amber: 0 0 8px rgb(232 160 60 / 0.45);
+
+  /* ---- Motion: UI feedback is quick; nothing animates layout properties ---- */
+  --dur-fast: 80ms;
+  --dur-base: 140ms;
+  --dur-slow: 240ms;
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- Layout constants (px). Pure-TS twins live in ui/src/lib/layout.ts (WP-B owns) ---- */
+  --transport-h: 48px;
+  --statusbar-h: 28px;
+  --ruler-h: 28px;
+  --lane-h: 72px;
+  --header-w: 208px;
+  --strip-w: 88px;
+  --master-w: 112px;
+  --mixer-h: 200px; /* body height default; user-resizable (store.view.mixerHeight) */
+  --mixer-min-h: 176px;
+  --mixer-bar-h: 24px; /* title bar with toggle + resize grip */
+  --hit-min: 24px; /* minimum pointer target for any control */
+
+  /* ---- Stacking ---- */
+  --z-overlay: 5; /* playhead, loop band, drag ghost */
+  --z-mixer: 10;
+  --z-popover: 50;
+  --z-modal: 100;
+  --z-toast: 200;
+}
+
+/* Reduced motion: keep state changes, drop easing/travel. Meter ballistics stay (they are data). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
