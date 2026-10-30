@@ -450,7 +450,7 @@
   function previewMove(g: Gesture, p: Point, dFrames: number, snapOn: boolean, thr: number): void {
     const raw = Math.round(g.clip.start + dFrames)
     const snapped = snapMove(g.candidates, raw, g.clip.length, thr, snapOn)
-    const start = computeMove(g.clip, snapped.frame - g.clip.start) ?? g.ghost.start
+    const start = computeMove(g.clip, snapped.frame - g.clip.start) ?? g.clip.start
     const lane = laneAt(p.y, store.project?.tracks.length ?? 0)
     g.ghost = { ...g.ghost, start, trackIndex: lane ?? g.ghost.trackIndex }
     g.snapTarget = snapped.target
@@ -459,16 +459,16 @@
   function previewTrimLeft(g: Gesture, dFrames: number, snapOn: boolean, thr: number): void {
     const raw = Math.round(g.clip.start + dFrames)
     const snapped = snap(g.candidates, raw, thr, snapOn)
-    const geom = computeTrimLeft(g.clip, snapped.frame)
-    if (geom) g.ghost = { ...g.ghost, start: geom.start, offset: geom.offset, length: geom.length }
+    const geom = computeTrimLeft(g.clip, snapped.frame) ?? g.clip
+    g.ghost = { ...g.ghost, start: geom.start, offset: geom.offset, length: geom.length }
     g.snapTarget = snapped.target
   }
 
   function previewTrimRight(g: Gesture, dFrames: number, snapOn: boolean, thr: number): void {
     const raw = Math.round(g.clip.start + g.clip.length + dFrames)
     const snapped = snap(g.candidates, raw, thr, snapOn)
-    const geom = computeTrimRight(g.clip, snapped.frame, sourceFrames(g.clip))
-    if (geom) g.ghost = { ...g.ghost, start: geom.start, offset: geom.offset, length: geom.length }
+    const geom = computeTrimRight(g.clip, snapped.frame, sourceFrames(g.clip)) ?? g.clip
+    g.ghost = { ...g.ghost, start: geom.start, offset: geom.offset, length: geom.length }
     g.snapTarget = snapped.target
   }
 
@@ -483,7 +483,8 @@
       ? frame - clip.start + g.grab
       : clip.start + clip.length - frame + g.grab
     const fades = computeFades(clip, isFadeIn ? 'in' : 'out', Math.max(0, Math.round(raw)))
-    if (fades) g.ghost = { ...g.ghost, fadeIn: fades.fadeIn, fadeOut: fades.fadeOut }
+    const next = fades ?? clip
+    g.ghost = { ...g.ghost, fadeIn: next.fadeIn, fadeOut: next.fadeOut }
   }
 
   async function onPointerUp(e: PointerEvent): Promise<void> {

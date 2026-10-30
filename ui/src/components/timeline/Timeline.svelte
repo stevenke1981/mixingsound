@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte'
   import { store } from '../../lib/store.svelte'
   import TrackHeader from './TrackHeader.svelte'
   import Ruler from './Ruler.svelte'
@@ -25,7 +26,8 @@
     }
     const observer = new ResizeObserver(apply)
     observer.observe(body)
-    apply()
+    if (lanesEl) observer.observe(lanesEl)
+    untrack(apply)
     return () => observer.disconnect()
   })
 </script>

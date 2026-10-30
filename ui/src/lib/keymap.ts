@@ -92,6 +92,7 @@ const KEY_CONSUMING_ROLES: ReadonlySet<string> = new Set([
   'slider',
   'spinbutton',
   'combobox',
+  'scrollbar',
 ])
 
 function normalizeKey(key: string): string {

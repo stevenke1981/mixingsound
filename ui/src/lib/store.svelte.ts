@@ -729,11 +729,17 @@ export class AppStore {
   }
 
   private patchView(patch: Partial<ViewState>): void {
-    this.view = { ...this.view, ...patch }
+    // Skip identical patches: effects that call setViewport would otherwise re-trigger forever.
+    const view = this.view
+    const keys = Object.keys(patch) as (keyof ViewState)[]
+    if (keys.every((k) => view[k] === patch[k])) return
+    this.view = { ...view, ...patch }
   }
 
   private setScroll(frame: number): void {
-    this.patchView({ scrollFrames: Math.max(0, finiteOr(frame)) })
+    const { fpp, viewportW } = this.view
+    const max = Math.max(0, this.projectEnd + 30 * this.sampleRate - viewportW * fpp)
+    this.patchView({ scrollFrames: Math.min(max, Math.max(0, finiteOr(frame))) })
   }
 
   private releaseFollowIfPlaying(): void {

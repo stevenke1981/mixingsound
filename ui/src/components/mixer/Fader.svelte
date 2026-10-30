@@ -162,6 +162,7 @@
       e.preventDefault()
       commitDraft()
     } else if (e.key === 'Escape') {
+      e.stopPropagation()
       draft = null
       ;(e.currentTarget as HTMLInputElement).blur()
     }

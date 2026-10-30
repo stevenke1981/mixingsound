@@ -569,3 +569,30 @@ describe('zoom', () => {
     expect(store.view.fpp).toBeLessThan(before)
   })
 })
+
+describe('view', () => {
+  it('keeps the same view object when setViewport repeats the current size', () => {
+    // Arrange
+    store.setViewport(800, 400)
+    const before = store.view
+
+    // Act
+    store.setViewport(800, 400)
+
+    // Assert
+    expect(store.view).toBe(before)
+  })
+
+  it('clamps scrolling to the project extent plus 30 seconds', () => {
+    // Arrange
+    store.setViewport(1000, 400)
+    store.setFpp(480)
+
+    // Act
+    store.scrollToFrame(1e12)
+
+    // Assert
+    const max = store.projectEnd + 30 * store.sampleRate - 1000 * store.view.fpp
+    expect(store.view.scrollFrames).toBe(Math.max(0, max))
+  })
+})

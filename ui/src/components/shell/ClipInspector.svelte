@@ -44,7 +44,7 @@
     }
     const clamped = Math.min(MAX_CLIP_GAIN_DB, Math.max(MIN_GAIN_DB, db))
     input.value = formatDb(clamped)
-    if (Math.abs(clamped - clip.gainDb) >= GAIN_EPSILON_DB) void store.setClipGain(clip.id, clamped)
+    if (Math.abs(clamped - clip.gainDb) >= GAIN_EPSILON_DB) void store.setClipGain(clip.id, clamped).then(() => store.endGesture())
   }
 
   function fadeText(side: FadeSide): string {
@@ -75,11 +75,11 @@
       input.value = fadeText(side)
       return
     }
-    void store.setClipFades(clip.id, fadeIn, fadeOut)
+    void store.setClipFades(clip.id, fadeIn, fadeOut).then(() => store.endGesture())
   }
 
   function resetGain(): void {
-    if (info) void store.setClipGain(info.clip.id, 0)
+    if (info) void store.setClipGain(info.clip.id, 0).then(() => store.endGesture())
   }
 </script>
 
