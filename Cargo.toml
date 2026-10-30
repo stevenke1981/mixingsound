@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+members = ["crates/engine", "src-tauri"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+
+[profile.dev.package."*"]
+# Decoding/resampling in debug builds is painfully slow; optimise dependencies.
+opt-level = 2
