@@ -31,7 +31,13 @@ impl Peaks {
     /// Returns `[min, max]` per column (exactly `columns` entries; columns past the end of the
     /// audio are `[0, 0]`). Uses the coarsest level whose `frames_per_peak` ≤ frames per
     /// column; when a column spans fewer frames than the finest level, reads `buffer` directly.
-    pub fn query(&self, buffer: &AudioBuffer, start: u64, end: u64, columns: usize) -> Vec<[f32; 2]> {
+    pub fn query(
+        &self,
+        buffer: &AudioBuffer,
+        start: u64,
+        end: u64,
+        columns: usize,
+    ) -> Vec<[f32; 2]> {
         let _ = (buffer, start, end, columns);
         todo!("decode worker")
     }

@@ -58,7 +58,12 @@ pub struct RenderGraph {
 
 impl RenderGraph {
     pub fn empty(sample_rate: u32) -> Self {
-        Self { sample_rate, tracks: Vec::new(), master_gain: 1.0, length: 0 }
+        Self {
+            sample_rate,
+            tracks: Vec::new(),
+            master_gain: 1.0,
+            length: 0,
+        }
     }
 }
 
@@ -66,7 +71,9 @@ impl RenderGraph {
 /// are skipped so the rest of the project still plays.
 pub fn build_graph(project: &Project, pool: &SourcePool) -> Result<RenderGraph> {
     if project.tracks.len() > MAX_TRACKS {
-        return Err(EngineError::InvalidEdit(format!("more than {MAX_TRACKS} tracks")));
+        return Err(EngineError::InvalidEdit(format!(
+            "more than {MAX_TRACKS} tracks"
+        )));
     }
     let any_solo = project.tracks.iter().any(|t| t.solo);
     let tracks = project
@@ -134,7 +141,11 @@ mod tests {
     #[test]
     fn resolves_solo_mute_and_missing_sources() {
         let mut p = Project::new(48_000);
-        p.tracks = vec![track(1, false, true), track(2, false, false), track(3, true, true)];
+        p.tracks = vec![
+            track(1, false, true),
+            track(2, false, false),
+            track(3, true, true),
+        ];
         let mut pool = SourcePool::new();
         pool.insert(1, Arc::new(AudioBuffer::new(vec![vec![0.0; 5]])));
         let g = build_graph(&p, &pool).unwrap();

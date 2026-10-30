@@ -132,9 +132,10 @@ impl Project {
 
     /// Returns (track index, clip index).
     pub fn find_clip(&self, id: ClipId) -> Option<(usize, usize)> {
-        self.tracks.iter().enumerate().find_map(|(ti, t)| {
-            t.clips.iter().position(|c| c.id == id).map(|ci| (ti, ci))
-        })
+        self.tracks
+            .iter()
+            .enumerate()
+            .find_map(|(ti, t)| t.clips.iter().position(|c| c.id == id).map(|ci| (ti, ci)))
     }
 
     /// Copy of the project re-timed to `sample_rate`: every frame quantity (clip start/offset/
@@ -229,7 +230,10 @@ mod tests {
         let q = p.with_sample_rate(48_000);
         let c = &q.tracks[0].clips[0];
         assert_eq!(q.sources[0].frames, 48_000);
-        assert_eq!((c.start, c.offset, c.length, c.fade_in), (48_000, 24_000, 24_000, 480));
+        assert_eq!(
+            (c.start, c.offset, c.length, c.fade_in),
+            (48_000, 24_000, 24_000, 480)
+        );
         assert!(c.offset + c.length <= q.sources[0].frames);
     }
 }
